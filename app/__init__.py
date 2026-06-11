@@ -17,12 +17,13 @@ def create_app(config_name='development'):
     login_manager.login_message = 'Please log in to access this page.'
     
     # Register blueprints
-    from app.routes import auth_bp, inventory_bp, orders_bp, suppliers_bp, dashboard_bp
+    from app.routes import auth_bp, inventory_bp, orders_bp, suppliers_bp, dashboard_bp, warehouse_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(inventory_bp)
     app.register_blueprint(orders_bp)
     app.register_blueprint(suppliers_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(warehouse_bp)
     
     # Create tables
     with app.app_context():
