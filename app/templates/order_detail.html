@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Order {{ order.order_number }} - Simple ERP System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Order #{{ order.order_number }}</h1>
+    <div>
+        <a href="{{ url_for('orders.edit_order', id=order.id) }}" class="btn btn-warning">Edit</a>
+        <form method="POST" action="{{ url_for('orders.delete_order', id=order.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+        </form>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Order Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Status:</strong> <span class="badge bg-secondary">{{ order.status.title() }}</span></p>
+                <p><strong>Created:</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p><strong>Created By:</strong> {{ order.created_by_user.username }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Customer Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ order.customer_name }}</p>
+                <p><strong>Email:</strong> {{ order.customer_email or 'N/A' }}</p>
+                <p><strong>Phone:</strong> {{ order.customer_phone or 'N/A' }}</p>
+                <p><strong>Address:</strong> {{ order.delivery_address or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Order Items</h5>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.order_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.sku }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.unit_price) }}</td>
+                    <td>${{ "%.2f"|format(item.subtotal) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Notes</h5>
+            </div>
+            <div class="card-body">
+                {{ order.notes or 'No notes' }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Financial Summary</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Total Amount:</strong> <span style="font-size: 1.5em;" class="text-success">${{ "%.2f"|format(order.total_amount) }}</span></p>
+                <p><strong>Paid Amount:</strong> <span>${{ "%.2f"|format(order.paid_amount) }}</span></p>
+                <p><strong>Balance:</strong> <span class="text-warning">${{ "%.2f"|format(order.total_amount - order.paid_amount) }}</span></p>
+                <p>
+                    {% if order.is_paid() %}
+                    <span class="badge bg-success">PAID</span>
+                    {% else %}
+                    <span class="badge bg-warning">UNPAID</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

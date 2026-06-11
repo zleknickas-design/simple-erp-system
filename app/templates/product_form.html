@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{% if product %}Edit{% else %}Add{% endif %} Product - Simple ERP System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4">{% if product %}Edit{% else %}Add New{% endif %} Product</h1>
+        
+        <form method="POST" class="needs-validation">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ product.name if product else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sku" class="form-label">SKU</label>
+                        <input type="text" class="form-control" id="sku" name="sku" value="{{ product.sku if product else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ product.description if product else '' }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="category" name="category" value="{{ product.category if product else '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="supplier_id" class="form-label">Supplier</label>
+                            <select class="form-control" id="supplier_id" name="supplier_id">
+                                <option value="">-- Select Supplier --</option>
+                                {% for supplier in suppliers %}
+                                <option value="{{ supplier.id }}" {% if product and product.supplier_id == supplier.id %}selected{% endif %}>{{ supplier.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="price" class="form-label">Selling Price</label>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01" value="{{ product.price if product else 0 }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cost" class="form-label">Cost Price</label>
+                            <input type="number" class="form-control" id="cost" name="cost" step="0.01" value="{{ product.cost if product else 0 }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="quantity_in_stock" class="form-label">Quantity in Stock</label>
+                            <input type="number" class="form-control" id="quantity_in_stock" name="quantity_in_stock" value="{{ product.quantity_in_stock if product else 0 }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="reorder_level" class="form-label">Reorder Level</label>
+                            <input type="number" class="form-control" id="reorder_level" name="reorder_level" value="{{ product.reorder_level if product else 10 }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('inventory.products_list') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">{% if product %}Update{% else %}Create{% endif %} Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Cards */
+.card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-header {
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Tables */
+.table {
+    background-color: white;
+}
+
+.table thead {
+    font-weight: 600;
+}
+
+/* Badges */
+.badge {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.85rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: 0.25rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Dashboard Cards */
+.card.bg-primary, .card.bg-success, .card.bg-warning, .card.bg-info, .card.bg-danger {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card.bg-primary .card-text, 
+.card.bg-success .card-text,
+.card.bg-info .card-text,
+.card.bg-danger .card-text {
+    color: white;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .d-flex .btn {
+        margin-top: 1rem;
+    }
+}
+
+/* Pagination */
+.pagination {
+    gap: 0.25rem;
+}
+
+/* Alert Messages */
+.alert {
+    border-radius: 0.25rem;
+    border: none;
+}
+
+/* Status Badges */
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+}
