@@ -1,30 +1,23 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required
-from app import db
-from datetime import datetime
+from flask import Blueprint, render_template
 
 warehouse_bp = Blueprint('warehouse', __name__, url_prefix='/warehouse')
 
 @warehouse_bp.route('/receipts')
-@login_required
 def receipts():
-    """Warehouse receipts (Gauvimai)"""
+    """Warehouse receipts (incoming goods)"""
     return render_template('warehouse/receipts.html')
 
-@warehouse_bp.route('/pickings')
-@login_required
-def pickings():
-    """Warehouse pickings (Paėmimai)"""
-    return render_template('warehouse/pickings.html')
+@warehouse_bp.route('/pickups')
+def pickups():
+    """Warehouse pickups (outgoing goods)"""
+    return render_template('warehouse/pickups.html')
 
-@warehouse_bp.route('/write-offs')
-@login_required
-def write_offs():
-    """Warehouse write-offs (Nurašymai)"""
-    return render_template('warehouse/write_offs.html')
+@warehouse_bp.route('/writeoffs')
+def writeoffs():
+    """Warehouse writeoffs (damaged/unusable goods)"""
+    return render_template('warehouse/writeoffs.html')
 
 @warehouse_bp.route('/transfers')
-@login_required
 def transfers():
-    """Warehouse transfers (Perkėlimai)"""
+    """Warehouse transfers (between locations)"""
     return render_template('warehouse/transfers.html')
