@@ -29,7 +29,7 @@ def create_product():
         )
         db.session.add(product)
         db.session.commit()
-        flash(f'Product {product.name} created successfully', 'success')
+        flash(f'Prekė {product.name} sukurta sėkmingai', 'success')
         return redirect(url_for('inventory.products_list'))
     
     suppliers = Supplier.query.all()
@@ -51,7 +51,7 @@ def edit_product(id):
         product.reorder_level = int(request.form.get('reorder_level', 10))
         product.supplier_id = request.form.get('supplier_id') or None
         db.session.commit()
-        flash(f'Product {product.name} updated successfully', 'success')
+        flash(f'Prekė {product.name} atnaujinta sėkmingai', 'success')
         return redirect(url_for('inventory.products_list'))
     
     suppliers = Supplier.query.all()
@@ -63,7 +63,7 @@ def delete_product(id):
     product = Product.query.get_or_404(id)
     db.session.delete(product)
     db.session.commit()
-    flash(f'Product {product.name} deleted successfully', 'success')
+    flash(f'Prekė {product.name} ištrinta sėkmingai', 'success')
     return redirect(url_for('inventory.products_list'))
 
 @inventory_bp.route('/api/products')

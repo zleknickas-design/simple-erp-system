@@ -25,7 +25,7 @@ def orders_list():
 def create_order():
     if request.method == 'POST':
         order = Order(
-            order_number=f"ORD-{uuid.uuid4().hex[:8].upper()}",
+            order_number=f"UŽS-{uuid.uuid4().hex[:8].upper()}",
             customer_name=request.form.get('customer_name'),
             customer_email=request.form.get('customer_email'),
             customer_phone=request.form.get('customer_phone'),
@@ -55,7 +55,7 @@ def create_order():
         
         order.calculate_total()
         db.session.commit()
-        flash(f'Order {order.order_number} created successfully', 'success')
+        flash(f'Užsakymas {order.order_number} sukurtas sėkmingai', 'success')
         return redirect(url_for('orders.view_order', id=order.id))
     
     products = Product.query.filter_by(is_active=True).all()
@@ -81,7 +81,7 @@ def edit_order(id):
         order.status = request.form.get('status')
         order.paid_amount = float(request.form.get('paid_amount', 0))
         db.session.commit()
-        flash('Order updated successfully', 'success')
+        flash('Užsakymas atnaujintas sėkmingai', 'success')
         return redirect(url_for('orders.view_order', id=order.id))
     
     return render_template('order_form.html', order=order)
@@ -92,7 +92,7 @@ def delete_order(id):
     order = Order.query.get_or_404(id)
     db.session.delete(order)
     db.session.commit()
-    flash('Order deleted successfully', 'success')
+    flash('Užsakymas ištrintas sėkmingai', 'success')
     return redirect(url_for('orders.orders_list'))
 
 @orders_bp.route('/api/orders')

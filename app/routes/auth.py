@@ -22,7 +22,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('dashboard.index'))
         else:
-            flash('Invalid username or password', 'error')
+            flash('Neteisingas vartotojo vardas arba slaptažodis', 'error')
     
     return render_template('login.html')
 
@@ -30,7 +30,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out successfully', 'success')
+    flash('Atsijungėte sėkmingai', 'success')
     return redirect(url_for('auth.login'))
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -42,15 +42,15 @@ def register():
         confirm_password = request.form.get('confirm_password')
         
         if password != confirm_password:
-            flash('Passwords do not match', 'error')
+            flash('Slaptažodžiai nesutampa', 'error')
             return redirect(url_for('auth.register'))
         
         if User.query.filter_by(username=username).first():
-            flash('Username already exists', 'error')
+            flash('Vartotojo vardas jau egzistuoja', 'error')
             return redirect(url_for('auth.register'))
         
         if User.query.filter_by(email=email).first():
-            flash('Email already exists', 'error')
+            flash('El. paštas jau egzistuoja', 'error')
             return redirect(url_for('auth.register'))
         
         user = User(username=username, email=email)
@@ -58,7 +58,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         
-        flash('Registration successful! Please log in.', 'success')
+        flash('Registracija sėkminga! Prašome prisijungti.', 'success')
         return redirect(url_for('auth.login'))
     
     return render_template('register.html')

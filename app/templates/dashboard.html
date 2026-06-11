@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Simple ERP System{% endblock %}
+{% block title %}Prietaisai - Paprasta ERP Sistema{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Dashboard</h1>
+<h1 class="mb-4">Prietaisai</h1>
 
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="card bg-primary text-white">
             <div class="card-body">
-                <h5 class="card-title">Total Products</h5>
+                <h5 class="card-title">Iš viso prekių</h5>
                 <p class="card-text" style="font-size: 2em;">{{ total_products }}</p>
             </div>
         </div>
@@ -17,7 +17,7 @@
     <div class="col-md-3">
         <div class="card bg-success text-white">
             <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
+                <h5 class="card-title">Iš viso užsakymų</h5>
                 <p class="card-text" style="font-size: 2em;">{{ total_orders }}</p>
             </div>
         </div>
@@ -25,7 +25,7 @@
     <div class="col-md-3">
         <div class="card bg-warning text-dark">
             <div class="card-body">
-                <h5 class="card-title">Low Stock Items</h5>
+                <h5 class="card-title">Prekės su mažu atsargų kiekiu</h5>
                 <p class="card-text" style="font-size: 2em;">{{ low_stock_products }}</p>
             </div>
         </div>
@@ -33,7 +33,7 @@
     <div class="col-md-3">
         <div class="card bg-info text-white">
             <div class="card-body">
-                <h5 class="card-title">Total Suppliers</h5>
+                <h5 class="card-title">Iš viso tiekėjų</h5>
                 <p class="card-text" style="font-size: 2em;">{{ total_suppliers }}</p>
             </div>
         </div>
@@ -44,23 +44,23 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">Monthly Revenue</h5>
+                <h5 class="mb-0">Mėnesio pajamos</h5>
             </div>
             <div class="card-body">
-                <p style="font-size: 2em;" class="text-success">{{ "$%.2f"|format(monthly_revenue) }}</p>
+                <p style="font-size: 2em;" class="text-success">{{ "€%.2f"|format(monthly_revenue) }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">Order Status Summary</h5>
+                <h5 class="mb-0">Užsakymų būsenos santrauka</h5>
             </div>
             <div class="card-body">
                 <ul class="list-unstyled">
-                    <li><span class="badge bg-warning">Pending</span> {{ pending_orders }}</li>
-                    <li><span class="badge bg-info">Confirmed</span> {{ confirmed_orders }}</li>
-                    <li><span class="badge bg-primary">Shipped</span> {{ shipped_orders }}</li>
+                    <li><span class="badge bg-warning">Laukiama</span> {{ pending_orders }}</li>
+                    <li><span class="badge bg-info">Patvirtinta</span> {{ confirmed_orders }}</li>
+                    <li><span class="badge bg-primary">Išsiųsta</span> {{ shipped_orders }}</li>
                 </ul>
             </div>
         </div>
@@ -69,18 +69,18 @@
 
 <div class="card">
     <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">Recent Orders</h5>
+        <h5 class="mb-0">Neseniai sukurti užsakymai</h5>
     </div>
     <div class="card-body">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Order #</th>
-                    <th>Customer</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Action</th>
+                    <th>Užsakymo nr.</th>
+                    <th>Klientas</th>
+                    <th>Būsena</th>
+                    <th>Suma</th>
+                    <th>Data</th>
+                    <th>Veiksmas</th>
                 </tr>
             </thead>
             <tbody>
@@ -89,9 +89,9 @@
                     <td>{{ order.order_number }}</td>
                     <td>{{ order.customer_name }}</td>
                     <td><span class="badge bg-secondary">{{ order.status }}</span></td>
-                    <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                    <td>€{{ "%.2f"|format(order.total_amount) }}</td>
                     <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
-                    <td><a href="{{ url_for('orders.view_order', id=order.id) }}" class="btn btn-sm btn-info">View</a></td>
+                    <td><a href="{{ url_for('orders.view_order', id=order.id) }}" class="btn btn-sm btn-info">Peržiūrėti</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -29,7 +29,7 @@ def create_supplier():
         )
         db.session.add(supplier)
         db.session.commit()
-        flash(f'Supplier {supplier.name} created successfully', 'success')
+        flash(f'Tiekėjas {supplier.name} sukurtas sėkmingai', 'success')
         return redirect(url_for('suppliers.suppliers_list'))
     
     return render_template('supplier_form.html')
@@ -50,7 +50,7 @@ def edit_supplier(id):
         supplier.payment_terms = request.form.get('payment_terms')
         supplier.tax_id = request.form.get('tax_id')
         db.session.commit()
-        flash(f'Supplier {supplier.name} updated successfully', 'success')
+        flash(f'Tiekėjas {supplier.name} atnaujintas sėkmingai', 'success')
         return redirect(url_for('suppliers.suppliers_list'))
     
     return render_template('supplier_form.html', supplier=supplier)
@@ -61,7 +61,7 @@ def delete_supplier(id):
     supplier = Supplier.query.get_or_404(id)
     db.session.delete(supplier)
     db.session.commit()
-    flash(f'Supplier {supplier.name} deleted successfully', 'success')
+    flash(f'Tiekėjas {supplier.name} ištrintas sėkmingai', 'success')
     return redirect(url_for('suppliers.suppliers_list'))
 
 @suppliers_bp.route('/api/suppliers')

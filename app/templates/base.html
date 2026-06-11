@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Simple ERP System{% endblock %}</title>
+    <title>{% block title %}Paprasta ERP Sistema{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('dashboard.index') }}">ERP System</a>
+            <a class="navbar-brand" href="{{ url_for('dashboard.index') }}">ERP Sistema</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if current_user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('inventory.products_list') }}">Inventory</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('orders.orders_list') }}">Orders</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('suppliers.suppliers_list') }}">Suppliers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Prietaisai</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('inventory.products_list') }}">Inventorius</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('orders.orders_list') }}">Užsakymai</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('suppliers.suppliers_list') }}">Tiekėjai</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                 {{ current_user.username }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Išeiti</a></li>
                             </ul>
                         </li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Prisijungti</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Registruotis</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -55,7 +55,7 @@
 
     <footer class="bg-dark text-white mt-5 py-3">
         <div class="container text-center">
-            <p>&copy; 2024 Simple ERP System. All rights reserved.</p>
+            <p>&copy; 2024 Paprasta ERP Sistema. Visos teisės saugomos.</p>
         </div>
     </footer>
 
