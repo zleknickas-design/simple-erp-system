@@ -4,66 +4,127 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <h1 class="mb-4">{% if product %}Redaguoti preką{% else %}Pridėti naują preką{% endif %}</h1>
         
-        <form method="POST" class="needs-validation">
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Prekės pavadinimas</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ product.name if product else '' }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="sku" class="form-label">SKU</label>
-                        <input type="text" class="form-control" id="sku" name="sku" value="{{ product.sku if product else '' }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Aprašymas</label>
-                        <textarea class="form-control" id="description" name="description" rows="3">{{ product.description if product else '' }}</textarea>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="category" class="form-label">Kategorija</label>
-                            <input type="text" class="form-control" id="category" name="category" value="{{ product.category if product else '' }}">
+        <form method="POST" enctype="multipart/form-data" class="needs-validation">
+            <div class="row">
+                <!-- Image Section -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Prekės nuotrauka</h5>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="supplier_id" class="form-label">Tiekėjas</label>
-                            <select class="form-control" id="supplier_id" name="supplier_id">
-                                <option value="">-- Pasirinkite tiekėją --</option>
-                                {% for supplier in suppliers %}
-                                <option value="{{ supplier.id }}" {% if product and product.supplier_id == supplier.id %}selected{% endif %}>{{ supplier.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="price" class="form-label">Pardavimo kaina</label>
-                            <input type="number" class="form-control" id="price" name="price" step="0.01" value="{{ product.price if product else 0 }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="cost" class="form-label">Savikaina</label>
-                            <input type="number" class="form-control" id="cost" name="cost" step="0.01" value="{{ product.cost if product else 0 }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="quantity_in_stock" class="form-label">Kiekis sandėlyje</label>
-                            <input type="number" class="form-control" id="quantity_in_stock" name="quantity_in_stock" value="{{ product.quantity_in_stock if product else 0 }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="reorder_level" class="form-label">Minimalus atsargų lygis</label>
-                            <input type="number" class="form-control" id="reorder_level" name="reorder_level" value="{{ product.reorder_level if product else 10 }}">
+                        <div class="card-body text-center">
+                            <div id="imagePreview" style="margin-bottom: 15px;">
+                                {% if product and product.image_filename %}
+                                    <img src="{{ product.get_image_url() }}" alt="{{ product.name }}" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                {% else %}
+                                    <div style="width: 100%; height: 200px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
+                                        <div>
+                                            <div style="font-size: 3em; margin-bottom: 10px;">📷</div>
+                                            <p>Nuotrauka nepasirinkta</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Pasirinkite nuotrauką</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+                                <small class="form-text text-muted">Maksimalus dydis: 5MB. Leidžiami formatai: PNG, JPG, JPEG, GIF, WebP</small>
+                            </div>
+                            
+                            {% if product and product.image_filename %}
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="delete_image" name="delete_image">
+                                <label class="form-check-label" for="delete_image">
+                                    Ištrinti nuotrauką
+                                </label>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="{{ url_for('inventory.products_list') }}" class="btn btn-secondary">Atšaukti</a>
-                    <button type="submit" class="btn btn-primary">{% if product %}Atnaujinti{% else %}Sukurti{% endif %} preką</button>
+
+                <!-- Product Details Section -->
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Prekės duomenys</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Prekės pavadinimas</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ product.name if product else '' }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sku" class="form-label">SKU</label>
+                                <input type="text" class="form-control" id="sku" name="sku" value="{{ product.sku if product else '' }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Aprašymas</label>
+                                <textarea class="form-control" id="description" name="description" rows="3">{{ product.description if product else '' }}</textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="category" class="form-label">Kategorija</label>
+                                    <input type="text" class="form-control" id="category" name="category" value="{{ product.category if product else '' }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="supplier_id" class="form-label">Tiekėjas</label>
+                                    <select class="form-control" id="supplier_id" name="supplier_id">
+                                        <option value="">-- Pasirinkite tiekėją --</option>
+                                        {% for supplier in suppliers %}
+                                        <option value="{{ supplier.id }}" {% if product and product.supplier_id == supplier.id %}selected{% endif %}>{{ supplier.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="price" class="form-label">Pardavimo kaina (€)</label>
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01" value="{{ product.price if product else 0 }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cost" class="form-label">Savikaina (€)</label>
+                                    <input type="number" class="form-control" id="cost" name="cost" step="0.01" value="{{ product.cost if product else 0 }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="quantity_in_stock" class="form-label">Kiekis sandėlyje</label>
+                                    <input type="number" class="form-control" id="quantity_in_stock" name="quantity_in_stock" value="{{ product.quantity_in_stock if product else 0 }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="reorder_level" class="form-label">Minimalus atsargų lygis</label>
+                                    <input type="number" class="form-control" id="reorder_level" name="reorder_level" value="{{ product.reorder_level if product else 10 }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <div class="card-footer mt-3">
+                <a href="{{ url_for('inventory.products_list') }}" class="btn btn-secondary">Atšaukti</a>
+                <button type="submit" class="btn btn-primary">{% if product %}Atnaujinti{% else %}Sukurti{% endif %} preką</button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">`;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
 {% endblock %}
